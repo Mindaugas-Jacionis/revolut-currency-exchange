@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 const Input = styled.input`
-  background: rgba(255, 255, 255, 0.3);
+  background: ${props => props.theme.colors.blueLighter};
   border: none;
-  border-bottom: 1px solid #f3f4f5;
+  border-bottom: 2px solid ${props => props.theme.colors.grey};
   border-radius: 5px 5px 0 0;
   padding: 5px 15px;
   font-size: 22px;
   text-align: right;
-  color: #fff;
+  color: ${props => props.theme.colors.white};
 `;
 
 Input.defaultProps = {

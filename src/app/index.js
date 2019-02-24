@@ -1,10 +1,11 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import store from './state';
 import routes from './routes';
+import theme from './theme';
 
 const Container = styled.div`
   height: 100vh;
@@ -35,9 +36,11 @@ function App() {
     <React.Fragment>
       <GlobalStyles />
       <Provider store={store}>
-        <Container>
-          <Router>{routes}</Router>
-        </Container>
+        <ThemeProvider theme={theme}>
+          <Container>
+            <Router>{routes}</Router>
+          </Container>
+        </ThemeProvider>
       </Provider>
     </React.Fragment>
   );

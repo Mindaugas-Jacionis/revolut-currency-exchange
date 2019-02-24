@@ -14,7 +14,7 @@ const Container = styled.div`
     top: calc(${HEIGHT} / 2 - ${ARROW_SIZE} / 10);
     content: ' ';
     border: solid transparent;
-    border-top-color: #f3f4f5;
+    border-top-color: ${props => props.theme.colors.white};
     border-width: calc(${ARROW_SIZE} / 2);
     margin-left: calc(-${ARROW_SIZE} / 2);
     pointer-events: none;
@@ -23,7 +23,7 @@ const Container = styled.div`
 
 const StyledSelect = styled.select`
   border: none;
-  color: #fff;
+  color: ${props => props.theme.colors.white};
   background: transparent;
   height: ${HEIGHT};
   font-size: 16px;
