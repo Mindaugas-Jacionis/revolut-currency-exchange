@@ -32,7 +32,8 @@ class Exchange extends React.Component {
     super(props);
     this.unsubscribe = null;
     this.state = {
-      amount: 0,
+      baseAmount: 0,
+      exchangeAmount: null,
       exchangeTo: undefined,
     };
   }
@@ -56,10 +57,16 @@ class Exchange extends React.Component {
     polling.stop(this.unsubscribe);
   }
 
-  setAmount = e => {
-    const { value } = e.target;
-    this.setState({ amount: value > 0 ? value * -1 : value });
+  setBaseAmount = ({ target: { value } }) => {
+    this.setState({ baseAmount: Number(value), exchangeAmount: null });
   };
+
+  setExchangeAmount = ({ target: { value } }) => {
+    console.log(value);
+    this.setState({ baseAmount: null, exchangeAmount: Number(value) });
+  };
+
+  checkInputValue = value => typeof value === 'number' && !!value;
 
   setExchangeTo = e => {
     const { value } = e.target;
@@ -81,8 +88,14 @@ class Exchange extends React.Component {
 
   render() {
     const { fetching, rates, base, currencyList } = this.props;
-    const { amount, exchangeTo } = this.state;
+    const { baseAmount, exchangeAmount, exchangeTo } = this.state;
     const rate = rates[exchangeTo];
+    const amount = this.checkInputValue(baseAmount)
+      ? baseAmount
+      : convert({ amount: exchangeAmount, rate, reverse: true });
+    const exchange = this.checkInputValue(exchangeAmount)
+      ? exchangeAmount
+      : convert({ amount: baseAmount, rate });
 
     if (fetching && !Object.entries(rates).length) {
       return <div>Loading...</div>;
@@ -97,7 +110,11 @@ class Exchange extends React.Component {
             onChange={this.setBaseCurrency}
             options={this.normalizeSelectData(currencyList, [exchangeTo])}
           />
-          <Input type="number" value={amount} onChange={this.setAmount} />
+          <Input
+            type="number"
+            value={amount > 0 ? amount * -1 : amount}
+            onChange={this.setBaseAmount}
+          />
           <Rate value={rate} />
         </Card>
         <Card>
@@ -110,7 +127,11 @@ class Exchange extends React.Component {
               []
             )}
           />
-          <Input type="number" value={convert({ amount, rate })} disabled />
+          <Input
+            type="number"
+            value={exchange}
+            onChange={this.setExchangeAmount}
+          />
         </Card>
         <Button onClick={() => alert('I will update wallets')}>Exchange</Button>
       </Container>
