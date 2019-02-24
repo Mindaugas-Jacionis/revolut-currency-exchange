@@ -7,18 +7,24 @@ import styled from 'styled-components';
 import fx from '~/fx';
 import { polling, convert } from '~/utils';
 import { MAJOR_CURRENCIES } from '~/constants';
-import { Input as InputConmponent, Select } from 'components';
+import {
+  Input as InputConmponent,
+  Select,
+  Button as ButtonComponent,
+} from 'components';
 import { Rate, Title, Card } from './components';
-import './index.scss';
 
 const Container = styled.div`
   display: inline-flex;
   flex-direction: column;
-  position: relative;
 `;
 
 const Input = styled(InputConmponent)`
   margin-left: 50px;
+`;
+
+const Button = styled(ButtonComponent)`
+  margin-top: 20px;
 `;
 
 class Exchange extends React.Component {
@@ -92,8 +98,8 @@ class Exchange extends React.Component {
             options={this.normalizeSelectData(currencyList, [exchangeTo])}
           />
           <Input type="number" value={amount} onChange={this.setAmount} />
+          <Rate value={rate} />
         </Card>
-        <Rate value={rate} />
         <Card>
           <Title>To</Title>
           <Select
@@ -106,6 +112,7 @@ class Exchange extends React.Component {
           />
           <Input type="number" value={convert({ amount, rate })} disabled />
         </Card>
+        <Button onClick={() => alert('I will update wallets')}>Exchange</Button>
       </Container>
     );
   }

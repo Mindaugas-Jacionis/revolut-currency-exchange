@@ -1,17 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-function Button({ onClick, children }) {
-  return (
-    <button type="button" onClick={onClick}>
-      {children}
-    </button>
-  );
-}
+const Button = styled.button`
+  padding: 5px 15px;
+  font-size: 22px;
+  line-height: 26px;
+  color: #fff;
+  border-radius: 20px;
+  background: #eb008d;
+  border: none;
+  cursor: pointer;
 
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
+  &:hover {
+    background: #d2007e;
+  }
+`;
+
+Button.defaultProps = {
+  type: 'button',
 };
 
 export default Button;

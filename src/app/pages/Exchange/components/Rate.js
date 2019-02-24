@@ -7,11 +7,12 @@ const StyledRate = styled.div`
   position: absolute;
   line-height: 26px;
   padding: 0 10px;
-  border-radius: 10px;
+  border-radius: 15px;
   border: 1px solid #eb008d;
   left: 50%;
-  top: calc(50% - 15px);
-  transform: translate(-50%);
+  bottom: -15px;
+  z-index: 2;
+  transform: translateX(-50%);
   color: #018ff0;
 `;
 
