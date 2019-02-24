@@ -52,7 +52,7 @@ class Exchange extends React.Component {
 
   setAmount = e => {
     const { value } = e.target;
-    this.setState({ amount: value });
+    this.setState({ amount: value > 0 ? value * -1 : value });
   };
 
   setExchangeTo = e => {

@@ -1,5 +1,5 @@
 const convert = ({ amount = 0, rate = 0 } = {}) => {
-  const result = amount * rate;
+  const result = Math.round(amount * rate) / 100;
 
   if (Number.isNaN(result)) {
     return 0;
