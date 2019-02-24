@@ -1,8 +1,6 @@
 import idx from 'idx';
 import { NAME } from './constants';
 
-export const getSample = state => state[NAME].sample;
-
 export const isRatesFetching = state => state[NAME].rates.fetching;
 export const getRatesError = state => state[NAME].rates.error;
 export const getRatesData = state => state[NAME].rates.data;

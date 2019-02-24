@@ -62,7 +62,6 @@ class Exchange extends React.Component {
   };
 
   setExchangeAmount = ({ target: { value } }) => {
-    console.log(value);
     this.setState({ baseAmount: null, exchangeAmount: Number(value) });
   };
 
@@ -100,6 +99,8 @@ class Exchange extends React.Component {
     if (fetching && !Object.entries(rates).length) {
       return <div>Loading...</div>;
     }
+
+    // ToDo: onFocus remove value if null?
 
     return (
       <Container>

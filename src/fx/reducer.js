@@ -9,7 +9,6 @@ const DEFAULT_RATES_STATE = {
 };
 
 const DEFAULT_STATE = Immutable({
-  sample: 0,
   rates: DEFAULT_RATES_STATE,
 });
 
