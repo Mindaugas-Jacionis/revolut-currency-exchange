@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import fx from '~/fx';
+import user from '~/user';
 import { polling, convert } from '~/utils';
 import { MAJOR_CURRENCIES } from '~/constants';
 import {
@@ -12,9 +13,9 @@ import {
   Select,
   Button as ButtonComponent,
 } from 'components';
-import { Rate, Title, Card } from './components';
+import { Rate, Title, Card, Balance } from './components';
 
-const Container = styled.div`
+const Container = styled.form`
   display: inline-flex;
   flex-direction: column;
 `;
@@ -33,7 +34,7 @@ class Exchange extends React.Component {
     this.unsubscribe = null;
     this.state = {
       baseAmount: 0,
-      exchangeAmount: null,
+      exchangeAmount: 0,
       exchangeTo: undefined,
     };
   }
@@ -58,25 +59,48 @@ class Exchange extends React.Component {
   }
 
   setBaseAmount = ({ target: { value } }) => {
-    this.setState({ baseAmount: Number(value), exchangeAmount: null });
+    const numberValue = Number(value);
+
+    this.setState(({ exchangeTo }, { rates }) => {
+      const rate = rates[exchangeTo];
+      const converted = convert({ amount: numberValue, rate });
+
+      return {
+        baseAmount: numberValue > 0 ? numberValue : -1 * numberValue,
+        exchangeAmount: converted > 0 ? converted : -1 * converted,
+      };
+    });
   };
 
   setExchangeAmount = ({ target: { value } }) => {
-    this.setState({ baseAmount: null, exchangeAmount: Number(value) });
+    const numberValue = Number(value);
+
+    this.setState(({ exchangeTo }, { rates }) => {
+      const rate = rates[exchangeTo];
+
+      return {
+        baseAmount: convert({ amount: numberValue, rate, reverse: true }),
+        exchangeAmount: numberValue,
+      };
+    });
   };
 
   checkInputValue = value => typeof value === 'number' && !!value;
 
-  setExchangeTo = e => {
-    const { value } = e.target;
+  setExchangeTo = ({ target: { value } }) => {
+    const { baseAmount } = this.state;
+
     this.setState({ exchangeTo: value });
+    this.setBaseAmount({ target: { value: baseAmount } });
   };
 
   setBaseCurrency = e => {
+    const { baseAmount } = this.state;
     const { setBaseCurrency } = this.props;
     const { value } = e.target;
 
     setBaseCurrency(value);
+    this.setBaseAmount({ target: { value: baseAmount } });
   };
 
   normalizeSelectData = (data, exclude) =>
@@ -85,22 +109,27 @@ class Exchange extends React.Component {
       []
     );
 
+  onExchange = e => {
+    const { base, addToWallet, removeFromWallet } = this.props;
+    const { baseAmount, exchangeAmount, exchangeTo } = this.state;
+
+    e.preventDefault();
+
+    addToWallet({ currency: exchangeTo, amount: exchangeAmount });
+    removeFromWallet({ currency: base, amount: baseAmount });
+  };
+
   render() {
-    const { fetching, rates, base, currencyList } = this.props;
+    const { fetching, rates, base, currencyList, wallets } = this.props;
     const { baseAmount, exchangeAmount, exchangeTo } = this.state;
     const rate = rates[exchangeTo];
-    const amount = this.checkInputValue(baseAmount)
-      ? baseAmount
-      : convert({ amount: exchangeAmount, rate, reverse: true });
-    const exchange = this.checkInputValue(exchangeAmount)
-      ? exchangeAmount
-      : convert({ amount: baseAmount, rate });
 
     if (fetching && !Object.entries(rates).length) {
       return <div>Loading...</div>;
     }
-
-    // ToDo: onFocus remove value if null?
+    const baseBalance = wallets[base] || 0;
+    const exchangeBalance = wallets[exchangeTo] || 0;
+    const negativeBase = baseAmount > 0 ? baseAmount * -1 : baseAmount;
 
     return (
       <Container>
@@ -113,8 +142,14 @@ class Exchange extends React.Component {
           />
           <Input
             type="number"
-            value={amount > 0 ? amount * -1 : amount}
+            value={negativeBase}
             onChange={this.setBaseAmount}
+            name="amount"
+          />
+          <Balance
+            error={baseAmount > baseBalance}
+            balance={baseBalance}
+            currency={base}
           />
           <Rate value={rate} />
         </Card>
@@ -130,11 +165,15 @@ class Exchange extends React.Component {
           />
           <Input
             type="number"
-            value={exchange}
+            value={exchangeAmount}
             onChange={this.setExchangeAmount}
+            name="exchange"
           />
+          <Balance balance={exchangeBalance} currency={exchangeTo} />
         </Card>
-        <Button onClick={() => alert('I will update wallets')}>Exchange</Button>
+        <Button type="submit" onClick={this.onExchange}>
+          Exchange
+        </Button>
       </Container>
     );
   }
@@ -147,6 +186,9 @@ Exchange.propTypes = {
   fetching: PropTypes.bool.isRequired,
   getRates: PropTypes.func.isRequired,
   setBaseCurrency: PropTypes.func.isRequired,
+  addToWallet: PropTypes.func.isRequired,
+  removeFromWallet: PropTypes.func.isRequired,
+  wallets: PropTypes.shape({}).isRequired,
 };
 
 Exchange.defaultProps = {
@@ -159,10 +201,16 @@ const enhance = connect(
     fetching: fx.selectors.isRatesFetching(state),
     currencyList: fx.selectors.getCurrencyList(state),
     base: fx.selectors.getRatesBase(state),
+    wallets: user.selectors.getWallets(state),
   }),
   dispatch => ({
     getRates: bindActionCreators(fx.actions.getRates, dispatch),
     setBaseCurrency: bindActionCreators(fx.actions.setBaseCurrency, dispatch),
+    addToWallet: bindActionCreators(user.actions.addToWallet, dispatch),
+    removeFromWallet: bindActionCreators(
+      user.actions.removeFromWallet,
+      dispatch
+    ),
   })
 );
 

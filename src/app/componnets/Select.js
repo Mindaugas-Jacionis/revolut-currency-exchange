@@ -41,7 +41,7 @@ const StyledSelect = styled.select`
 function Select({ options, ...props }) {
   return (
     <Container>
-      <StyledSelect data-mobile="true" {...props}>
+      <StyledSelect {...props}>
         {options.map(({ value, label }, index) => (
           <option value={value} key={index}>
             {label || value}

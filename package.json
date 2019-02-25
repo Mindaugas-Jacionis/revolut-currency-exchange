@@ -10,6 +10,7 @@
     "develop": "webpack-dev-server --config webpack.dev.config.js --open"
   },
   "dependencies": {
+    "currency-symbol-map": "^4.0.4",
     "idx": "^2.4.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.0",

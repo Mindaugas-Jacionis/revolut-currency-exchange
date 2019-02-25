@@ -20,7 +20,6 @@ export default (state = DEFAULT_STATE, { type, payload }) => {
         data: state.rates.data,
         fetching: true,
       });
-    // TODO: use base and apply calculateRates
     case types.GET_RATES_SUCCESS: {
       const { data } = state.rates;
       const selectedBase = data.base || payload.base;
