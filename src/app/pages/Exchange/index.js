@@ -130,6 +130,7 @@ class Exchange extends React.Component {
     const baseBalance = wallets[base] || 0;
     const exchangeBalance = wallets[exchangeTo] || 0;
     const negativeBase = baseAmount > 0 ? baseAmount * -1 : baseAmount;
+    const invalidExchange = baseAmount > baseBalance;
 
     return (
       <Container>
@@ -147,7 +148,7 @@ class Exchange extends React.Component {
             name="amount"
           />
           <Balance
-            error={baseAmount > baseBalance}
+            error={invalidExchange}
             balance={baseBalance}
             currency={base}
           />
@@ -171,7 +172,11 @@ class Exchange extends React.Component {
           />
           <Balance balance={exchangeBalance} currency={exchangeTo} />
         </Card>
-        <Button type="submit" onClick={this.onExchange}>
+        <Button
+          disabled={invalidExchange}
+          type="submit"
+          onClick={this.onExchange}
+        >
           Exchange
         </Button>
       </Container>

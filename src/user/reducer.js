@@ -27,8 +27,6 @@ export default (state = DEFAULT_STATE, { type, payload }) => {
     case types.REMOVE_FROM_WALLET: {
       const currentAmount = state.wallets[payload.currency];
 
-      console.log('Value', payload);
-
       return Immutable.set(state, 'wallets', {
         ...state.wallets,
         [payload.currency]: round(currentAmount - payload.amount),

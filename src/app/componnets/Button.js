@@ -6,12 +6,14 @@ const Button = styled.button`
   line-height: 26px;
   color: ${props => props.theme.colors.white};
   border-radius: 20px;
-  background: ${props => props.theme.colors.pink};
+  background: ${({ theme, disabled }) =>
+    disabled ? theme.colors.grey : theme.colors.pink}
   border: none;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
-    background: ${props => props.theme.colors.pinkDarker};
+    background: ${({ theme, disabled }) =>
+      disabled ? theme.colors.grey : theme.colors.pinkDarker};
   }
 `;
 

@@ -8,7 +8,7 @@ __Note: Revolut website has redux dev tools on, should put them under dev mode o
 - [x] Add currency code to symbol mapper
 - [x] Add Theme via styled-components to unify colors
 - [x] Implement exchange functionality
-- [ ] Prevent Exchange when balance invalid
+- [x] Prevent Exchange when balance invalid(disable button)
 
 
 ### Nice to have:
@@ -16,3 +16,4 @@ __Note: Revolut website has redux dev tools on, should put them under dev mode o
 - [ ] utils toPositive/toNegative to convert values to one or another + tests
 - [ ] round util to have 2 digits after dot + tests
 - [ ] Flip base with exchange currency
+- [ ] Add redux persist to persist user wallets?
