@@ -1,5 +1,6 @@
 import Immutable from 'seamless-immutable';
 import * as types from './actionTypes';
+import { round } from '~/utils';
 
 const DEFAULT_WALLETS_STATE = {
   USD: 5000,
@@ -11,7 +12,7 @@ const DEFAULT_STATE = Immutable({
   wallets: DEFAULT_WALLETS_STATE,
 });
 
-const round = value => Math.round(value * 100) / 100;
+// const round = value => Math.round(value * 100) / 100;
 
 export default (state = DEFAULT_STATE, { type, payload }) => {
   switch (type) {

@@ -2,31 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 
 import fx from '~/fx';
 import user from '~/user';
-import { polling, convert } from '~/utils';
+import { polling, convert, toPositive, toNegative } from '~/utils';
 import { MAJOR_CURRENCIES } from '~/constants';
+import { Select } from 'components';
 import {
-  Input as InputConmponent,
-  Select,
-  Button as ButtonComponent,
-} from 'components';
-import { Rate, Title, Card, Balance } from './components';
-
-const Container = styled.form`
-  display: inline-flex;
-  flex-direction: column;
-`;
-
-const Input = styled(InputConmponent)`
-  margin-left: 50px;
-`;
-
-const Button = styled(ButtonComponent)`
-  margin-top: 20px;
-`;
+  Rate,
+  Title,
+  Card,
+  Balance,
+  Button,
+  Input,
+  Container,
+} from './components';
 
 class Exchange extends React.Component {
   constructor(props) {
@@ -66,8 +56,8 @@ class Exchange extends React.Component {
       const converted = convert({ amount: numberValue, rate });
 
       return {
-        baseAmount: numberValue > 0 ? numberValue : -1 * numberValue,
-        exchangeAmount: converted > 0 ? converted : -1 * converted,
+        baseAmount: toPositive(numberValue),
+        exchangeAmount: toPositive(converted),
       };
     });
   };
@@ -129,7 +119,7 @@ class Exchange extends React.Component {
     }
     const baseBalance = wallets[base] || 0;
     const exchangeBalance = wallets[exchangeTo] || 0;
-    const negativeBase = baseAmount > 0 ? baseAmount * -1 : baseAmount;
+    const negativeBase = toNegative(baseAmount);
     const invalidExchange = baseAmount > baseBalance;
 
     return (

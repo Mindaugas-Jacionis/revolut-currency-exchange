@@ -9,7 +9,7 @@ __Note: Revolut website has redux dev tools on, should put them under dev mode o
 - [x] Add Theme via styled-components to unify colors
 - [x] Implement exchange functionality
 - [x] Prevent Exchange when balance invalid(disable button)
-
+- [ ] Media query at 444px for input
 
 ### Nice to have:
 
