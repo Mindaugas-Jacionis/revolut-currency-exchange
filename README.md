@@ -9,11 +9,12 @@ __Note: Revolut website has redux dev tools on, should put them under dev mode o
 - [x] Add Theme via styled-components to unify colors
 - [x] Implement exchange functionality
 - [x] Prevent Exchange when balance invalid(disable button)
-- [ ] Media query at 444px for input
+- [x] ~~Media query at 444px for input~~ Fix responsiveness 
 
 ### Nice to have:
 
-- [ ] utils toPositive/toNegative to convert values to one or another + tests
-- [ ] round util to have 2 digits after dot + tests
-- [ ] Flip base with exchange currency
-- [ ] Add redux persist to persist user wallets?
+- [x] utils toPositive/toNegative to convert values to one or another + tests
+- [x] round util to have 2 digits after dot + tests
+- [x] Flip base with exchange currency
+- [ ] Add redux persist to persist user wallets(maybe)
+- [ ] Decent 404 page

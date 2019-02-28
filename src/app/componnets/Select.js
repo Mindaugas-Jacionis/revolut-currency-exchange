@@ -7,6 +7,7 @@ const ARROW_SIZE = '12px';
 const Container = styled.div`
   position: relative;
   display: inline-flex;
+  box-sizing: border-box;
 
   &:before {
     position: absolute;

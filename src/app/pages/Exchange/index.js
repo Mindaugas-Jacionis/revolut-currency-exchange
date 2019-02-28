@@ -7,15 +7,16 @@ import fx from '~/fx';
 import user from '~/user';
 import { polling, convert, toPositive, toNegative } from '~/utils';
 import { MAJOR_CURRENCIES } from '~/constants';
-import { Select } from 'components';
+import { Input } from 'components';
 import {
   Rate,
   Title,
   Card,
   Balance,
   Button,
-  Input,
+  Select,
   Container,
+  FlipCurrencies,
 } from './components';
 
 class Exchange extends React.Component {
@@ -47,6 +48,19 @@ class Exchange extends React.Component {
   componentWillUnmount() {
     polling.stop(this.unsubscribe);
   }
+
+  onFlipCurrencies = () => {
+    const { baseAmount } = this.state;
+    const { setBaseCurrency } = this.props;
+
+    this.setState(
+      (state, props) => {
+        setBaseCurrency(state.exchangeTo);
+        return { exchangeTo: props.base };
+      },
+      () => this.setBaseAmount({ target: { value: baseAmount } })
+    );
+  };
 
   setBaseAmount = ({ target: { value } }) => {
     const numberValue = Number(value);
@@ -130,6 +144,7 @@ class Exchange extends React.Component {
             value={base}
             onChange={this.setBaseCurrency}
             options={this.normalizeSelectData(currencyList, [exchangeTo])}
+            containerStyles="margin-right: 50px;"
           />
           <Input
             type="number"
@@ -143,6 +158,7 @@ class Exchange extends React.Component {
             currency={base}
           />
           <Rate value={rate} />
+          <FlipCurrencies onClick={this.onFlipCurrencies} />
         </Card>
         <Card>
           <Title>To</Title>

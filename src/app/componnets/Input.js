@@ -8,6 +8,8 @@ const Input = styled.input`
   padding: 5px 15px;
   font-size: 22px;
   text-align: right;
+  box-sizing: border-box;
+  max-width: 100%;
   color: ${props => props.theme.colors.white};
 `;
 
