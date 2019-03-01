@@ -37,6 +37,14 @@ const StyledSelect = styled.select`
   &:focus {
     box-shadow: none;
   }
+
+  &:focus {
+    background: ${props => props.theme.colors.blueLighter};
+  }
+
+  &::-ms-expand {
+    display: none;
+  }
 `;
 
 function Select({ options, ...props }) {
